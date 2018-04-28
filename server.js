@@ -1,6 +1,15 @@
 var express = require('express');
 var passport = require('passport');
 var Strategy = require('passport-local').Strategy;
+
+var mongoose = require('mongoose');
+mongoose.connect(process.env.MONGODB_URI);
+var mongo = mongoose.connection;
+mongo.on('error', console.error.bind(console, 'connection error:'));
+mongo.once('open', function() {
+  // we're connected!
+});
+
 var db = require('./db');
 
 
