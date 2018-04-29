@@ -95,9 +95,9 @@ angular.module('starter.controllers', [])
         });
       }
     }
-    console.log(events)
     return events;
   }
+  
   $scope.calendar = {};
   $scope.calendar.eventSource = createRandomEvents();
 
