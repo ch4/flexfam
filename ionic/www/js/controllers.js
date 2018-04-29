@@ -1,0 +1,111 @@
+angular.module('starter.controllers', [])
+
+.controller('AppCtrl', function($scope, $ionicModal, $timeout) {
+
+  // With the new view caching in Ionic, Controllers are only called
+  // when they are recreated or on app start, instead of every page change.
+  // To listen for when this page is active (for example, to refresh data),
+  // listen for the $ionicView.enter event:
+  //$scope.$on('$ionicView.enter', function(e) {
+  //});
+
+  // Form data for the login modal
+  $scope.loginData = {};
+
+  // Create the login modal that we will use later
+  $ionicModal.fromTemplateUrl('templates/login.html', {
+    scope: $scope
+  }).then(function(modal) {
+    $scope.modal = modal;
+  });
+
+  // Triggered in the login modal to close it
+  $scope.closeLogin = function() {
+    $scope.modal.hide();
+  };
+
+  // Open the login modal
+  $scope.login = function() {
+    $scope.modal.show();
+  };
+
+  // Perform the login action when the user submits the login form
+  $scope.doLogin = function() {
+    console.log('Doing login', $scope.loginData);
+
+    // Simulate a login delay. Remove this and replace with your login
+    // code if using a login system
+    $timeout(function() {
+      $scope.closeLogin();
+    }, 1000);
+  };
+
+  $scope.familyMembers = [
+    {id: 1, fname:"Becky"},
+    {id: 2, fname:"Maurice"},
+    {id: 3, fname:"April"},
+    {id: 4, fname:"Jack"},
+  ];
+
+})
+
+.controller('HomeCtrl', function($scope) {
+  $scope.filterByFamilyMemberId = null;
+
+  $scope.setFilterByFamilyMemberId = function(id) {
+    $scope.filterByFamilyMemberId = id;
+    console.log('selected member id', $scope.filterByFamilyMemberId);
+  };
+
+  $scope.onEventSelected = function (event) {
+    console.log('selected event', event.title);
+  };
+
+  function createRandomEvents() {
+    var events = [];
+    for (var i = 0; i < 50; i += 1) {
+      var date = new Date();
+      var eventType = Math.floor(Math.random() * 2);
+      var startDay = Math.floor(Math.random() * 90) - 45;
+      var endDay = Math.floor(Math.random() * 2) + startDay;
+      var startTime;
+      var endTime;
+      if (eventType === 0) {
+        startTime = new Date(Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate() + startDay));
+        if (endDay === startDay) {
+          endDay += 1;
+        }
+        endTime = new Date(Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate() + endDay));
+        events.push({
+          title: 'All Day - ' + i,
+          startTime: startTime,
+          endTime: endTime,
+          allDay: true
+        });
+      } else {
+        var startMinute = Math.floor(Math.random() * 24 * 60);
+        var endMinute = Math.floor(Math.random() * 180) + startMinute;
+        startTime = new Date(date.getFullYear(), date.getMonth(), date.getDate() + startDay, 0, date.getMinutes() + startMinute);
+        endTime = new Date(date.getFullYear(), date.getMonth(), date.getDate() + endDay, 0, date.getMinutes() + endMinute);
+        events.push({
+          title: 'Event - ' + i,
+          startTime: startTime,
+          endTime: endTime,
+          allDay: false
+        });
+      }
+    }
+    console.log(events)
+    return events;
+  }
+  $scope.calendar = {};
+  $scope.calendar.eventSource = createRandomEvents();
+
+})
+
+.controller('PlaylistCtrl', function($scope, $stateParams) {
+})
+
+.controller('SettingsCtrl', function($scope, $stateParams) {
+
+});

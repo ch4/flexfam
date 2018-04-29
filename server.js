@@ -3,12 +3,13 @@ var passport = require('passport');
 var Strategy = require('passport-local').Strategy;
 
 var mongoose = require('mongoose');
-mongoose.connect(process.env.MONGODB_URI);
-var mongo = mongoose.connection;
-mongo.on('error', console.error.bind(console, 'connection error:'));
-mongo.once('open', function() {
-  // we're connected!
-});
+
+// mongoose.connect(process.env.MONGODB_URI);
+// var mongo = mongoose.connection;
+// mongo.on('error', console.error.bind(console, 'connection error:'));
+// mongo.once('open', function() {
+//   // we're connected!
+// });
 
 var db = require('./db');
 
@@ -70,7 +71,7 @@ app.use(require('express-session')({ secret: 'keyboard cat', resave: false, save
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.use(express.static('public'))
+app.use(express.static('ionic/www'))
 
 // Define routes.
 // app.get('/',
@@ -82,13 +83,13 @@ app.get('/login',
   function(req, res){
     res.render('login');
   });
-  
-app.post('/login', 
+
+app.post('/login',
   passport.authenticate('local', { failureRedirect: '/login' }),
   function(req, res) {
     res.redirect('/');
   });
-  
+
 app.get('/logout',
   function(req, res){
     req.logout();
