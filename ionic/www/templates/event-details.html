@@ -1,0 +1,36 @@
+<ion-view view-title="{{eventObj.title}}" class="page-event-details">
+  <ion-content>
+    <ion-list>
+      <ion-item class="item item-icon-left" >
+        <i class="icon ion-clock"></i>
+        Start Time
+        <span class="item-note">
+            {{eventObj.startTime}}
+        </span>
+      </ion-item>
+
+      <ion-item class="item item-icon-left" >
+        <i class="icon ion-clock"></i>
+        End Time
+        <span class="item-note">
+            {{eventObj.endTime}}
+        </span>
+      </ion-item>
+
+      <ion-item class="item item-divider" >
+        Comments
+      </ion-item>
+      <ion-item>
+        <div class="list list-inset">
+          <label class="item item-input">
+            <input type="text" placeholder="Enter comment...">
+            <i class="icon ion-paper-airplane placeholder-icon"></i>
+
+          </label>
+        </div>
+      </ion-item>
+
+
+    </ion-list>
+  </ion-content>
+</ion-view>

@@ -80,15 +80,19 @@ angular.module('starter', ['ionic', 'starter.controllers', 'ui.rCalendar'])
     }
   })
 
-  .state('app.single', {
-    url: '/playlists/:playlistId',
+  .state('app.eventdetails', {
+    url: '/eventdetails',
     views: {
       'menuContent': {
-        templateUrl: 'templates/playlist.html',
-        controller: 'PlaylistCtrl'
+        templateUrl: 'templates/event-details.html',
+        controller: 'EventDetailsCtrl'
       }
+    },
+    params: {
+      event: null
     }
-  });
+  })
+
   // if none of the above states are matched, use this as the fallback
   $urlRouterProvider.otherwise('/app/home');
 });

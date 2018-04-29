@@ -49,7 +49,7 @@ angular.module('starter.controllers', [])
 
 })
 
-.controller('HomeCtrl', function($scope) {
+.controller('HomeCtrl', ['$scope', '$stateParams', '$state', function($scope, $stateParams, $state) {
   $scope.filterByFamilyMemberId = null;
 
   $scope.setFilterByFamilyMemberId = function(id) {
@@ -58,7 +58,8 @@ angular.module('starter.controllers', [])
   };
 
   $scope.onEventSelected = function (event) {
-    console.log('selected event', event.title);
+    console.log('selected event', event);
+    $state.go('app.eventdetails', {event: event});
   };
 
   function createRandomEvents() {
@@ -77,10 +78,12 @@ angular.module('starter.controllers', [])
         }
         endTime = new Date(Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate() + endDay));
         events.push({
+          id: i,
           title: 'All Day - ' + i,
           startTime: startTime,
           endTime: endTime,
-          allDay: true
+          allDay: true,
+          participants: [1,2],
         });
       } else {
         var startMinute = Math.floor(Math.random() * 24 * 60);
@@ -88,22 +91,28 @@ angular.module('starter.controllers', [])
         startTime = new Date(date.getFullYear(), date.getMonth(), date.getDate() + startDay, 0, date.getMinutes() + startMinute);
         endTime = new Date(date.getFullYear(), date.getMonth(), date.getDate() + endDay, 0, date.getMinutes() + endMinute);
         events.push({
+          id: i,
           title: 'Event - ' + i,
           startTime: startTime,
           endTime: endTime,
-          allDay: false
+          allDay: false,
+          participants: [3,4],
         });
       }
     }
     return events;
   }
-  
+
   $scope.calendar = {};
   $scope.calendar.eventSource = createRandomEvents();
 
-})
+}])
 
-.controller('PlaylistCtrl', function($scope, $stateParams) {
+.controller('EventDetailsCtrl', function($scope, $stateParams) {
+  $scope.eventObj = $stateParams.event;
+  console.log('$scope.event', $scope.event);
+
+
 })
 
 .controller('SettingsCtrl', function($scope, $stateParams) {
