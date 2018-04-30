@@ -117,19 +117,22 @@ angular.module('starter.controllers', ['starter.services'])
 
   };
 
-  $scope.chatData = [
-    {
-      chatId: 0,
-      ownerId: 5,
-      recipientId: 1,
-      messages: [
-        {
-          userId: 5,
-          text: "Can you pick up the kids from school today?"
-        }
-      ]
-    }
-  ];
+
+  UserService.getMessages().then(function(res){
+    $scope.chatData = res;
+  });
+
+
+
+  setInterval(myMethod, 1000);
+
+  function myMethod( )
+  {
+    UserService.getMessages().then(function(res){
+      $scope.chatData = res;
+    });
+    $scope.$apply();
+  }
 
   $scope.convertUtcToLocal = function (timeStr) {
     return new Date(timeStr).toString();
@@ -140,11 +143,15 @@ angular.module('starter.controllers', ['starter.services'])
     var d = new Date();
     // d = d.toLocaleTimeString().replace(/:\d+ /, ' ');
 
-    $scope.chatData[0].messages.push({
+    var chatData = angular.copy($scope.chatData[0]);
+
+    chatData.messages.push({
       userId: 5,
       text: $scope.data.message,
       time: d
     });
+
+    UserService.addMessage(chatData);
 
     delete $scope.data.message;
     $ionicScrollDelegate.scrollBottom(true);

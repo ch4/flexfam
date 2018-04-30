@@ -1,5 +1,5 @@
 angular.module('starter.services', [])
-.factory('UserService', [function() {
+.factory('UserService', ['$http', function($http) {
   var users = [
     {
       userId: 1,
@@ -23,9 +23,21 @@ angular.module('starter.services', [])
     }
   ];
 
-  function addMessage(msg){
-    //TODO
-    return null;
+  function addMessage(data){
+
+    $http.post('http://flexfam.herokuapp.com/messages', data, null)
+      .then(
+        function(response){
+          // success callback
+          console.log(response)
+          return response;
+        },
+        function(response){
+          // failure callback
+          console.log(response)
+          return response;
+        }
+      );
   }
 
   function getUserName(userId){
@@ -33,9 +45,24 @@ angular.module('starter.services', [])
     return foundUsers[0].name;
   }
 
+  function getMessages() {
+    return $http({
+      method: 'GET',
+      url: 'http://flexfam.herokuapp.com/messages'
+    }).then(function successCallback(response) {
+      // this callback will be called asynchronously
+      // when the response is available
+      return response.data;
+    }, function errorCallback(response) {
+      // called asynchronously if an error occurs
+      // or server returns response with an error status.
+    });
+  }
+
   return {
     users: users,
     addMessage: addMessage,
+    getMessages: getMessages,
     getUserName: getUserName,
   };
 }])

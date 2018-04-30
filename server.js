@@ -1,6 +1,7 @@
 var express = require('express');
 var passport = require('passport');
 var Strategy = require('passport-local').Strategy;
+var cors = require('cors')
 
 var mongoose = require('mongoose');
 
@@ -122,6 +123,7 @@ app.get('/messages',
         });
 });
 
+app.options('/messages', cors({origin:false})) // enable pre-flight request for DELETE request
 app.post('/messages',
     function(req, res){
     var messages = req.body.messages;
