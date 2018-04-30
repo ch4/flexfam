@@ -9890,5 +9890,7 @@ a.button {
   width: 100%; }
 
 .page-event-details .placeholder-icon {
-  padding-right: 10px;
-  color: red; }
+  padding-right: 10px; }
+
+.page-chat .chatitem .username {
+  font-weight: bolder; }

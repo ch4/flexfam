@@ -1,6 +1,6 @@
-angular.module('starter.controllers', [])
+angular.module('starter.controllers', ['starter.services'])
 
-.controller('AppCtrl', function($scope, $ionicModal, $timeout) {
+.controller('AppCtrl', ['$scope', '$ionicModal', '$timeout', 'UserService', function($scope, $ionicModal, $timeout, UserService) {
 
   // With the new view caching in Ionic, Controllers are only called
   // when they are recreated or on app start, instead of every page change.
@@ -40,14 +40,16 @@ angular.module('starter.controllers', [])
     }, 1000);
   };
 
-  $scope.familyMembers = [
-    {id: 1, fname:"Becky"},
-    {id: 2, fname:"Maurice"},
-    {id: 3, fname:"April"},
-    {id: 4, fname:"Jack"},
-  ];
+  // $scope.familyMembers = [
+  //   {id: 1, fname:"Becky"},
+  //   {id: 2, fname:"Maurice"},
+  //   {id: 3, fname:"April"},
+  //   {id: 4, fname:"Jack"},
+  // ];
 
-})
+  $scope.familyMembers = UserService.users;
+  $scope.UserService = UserService;
+}])
 
 .controller('HomeCtrl', ['$scope', '$stateParams', '$state', function($scope, $stateParams, $state) {
   $scope.filterByFamilyMemberId = null;
@@ -108,10 +110,13 @@ angular.module('starter.controllers', [])
 
 }])
 
-.controller('ChatCtrl', ['$scope', '$stateParams', '$state', function($scope, $stateParams, $state) {
+.controller('ChatCtrl', ['$scope', '$stateParams', '$state', 'UserService', function($scope, $stateParams, $state, UserService) {
+  $scope.UserService = UserService;
+
   $scope.chatData = [
     {
-      participantsId: [1,2],
+      ownerId: 1,
+      recipientId: 2,
       messages: [
         {
           userId: 1,

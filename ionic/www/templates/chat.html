@@ -20,10 +20,10 @@
         <!--</div>-->
       <!--</div>-->
 
-      <ion-item ng-repeat="chat in chatData" class="item-icon-left item-icon-right" ng-href="">
+      <ion-item ng-repeat="chat in chatData" class="item-icon-left item-icon-right chatitem" ng-href="">
         <i class="icon ion-chatbox"></i>
-        <span>{{chat.messages[0].text}}</span>
-        <span>{{chat.messages[0].text}}</span>
+        <div class="username">{{UserService.getUserName(chat.recipientId)}}</div>
+        <div>{{chat.messages[0].text}}</div>
         <i class="icon ion-chevron-right"></i>
         <!--<i class="icon" ng-class="{'ion-ios7-circle-filled': !task.is_done(), 'ion-ios7-checkmark': task.is_done()}" ng-click="toggleDone(task)"></i>-->
         <!--<span ng-click="toggleDone(task)" ng-class="{done: task.is_done()}">{{ task.the_title() }}</span>-->

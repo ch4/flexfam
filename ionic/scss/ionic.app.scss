@@ -46,3 +46,11 @@ $ionicons-font-path: "../lib/ionic/fonts" !default;
     padding-right: 10px;
   }
 }
+
+.page-chat {
+  .chatitem {
+    .username {
+      font-weight: bolder;
+    }
+  }
+}
