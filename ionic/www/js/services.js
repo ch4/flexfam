@@ -4,27 +4,27 @@ angular.module('starter.services', [])
     {
       userId: 1,
       name: "Mom",
-      phone: '5412818096'
+      phone: '+15412818096'
     },
     {
       userId: 2,
       name: "Brother",
-      phone: '2252509661'
+      phone: '+12252509661'
     },
     {
       userId: 3,
       name: "Grandma",
-      phone: '7196495701'
+      phone: '+17196495701'
     },
     {
       userId: 4,
       name: "Uncle",
-      phone: '4156466297'
+      phone: '+14156466297'
     },
     {
       userId: 5,
       name: "Dad",
-      phone: ''
+      phone: '+15857277105'
     }
   ];
 

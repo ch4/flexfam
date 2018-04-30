@@ -3,6 +3,7 @@ var passport = require('passport');
 var Strategy = require('passport-local').Strategy;
 var cors = require('cors');
 var _ = require('lodash');
+var Promise = require("bluebird");
 
 var mongoose = require('mongoose');
 const MessagingResponse = require('twilio').twiml.MessagingResponse;
@@ -24,27 +25,27 @@ var users = [
     {
         userId: 1,
         name: "Mom",
-        phone: '5412818096'
+        phone: '+15412818096'
     },
     {
         userId: 2,
         name: "Brother",
-        phone: '2252509661'
+        phone: '+12252509661'
     },
     {
         userId: 3,
         name: "Grandma",
-        phone: '7196495701'
+        phone: '+17196495701'
     },
     {
         userId: 4,
         name: "Uncle",
-        phone: '4156466297'
+        phone: '+14156466297'
     },
     {
         userId: 5,
         name: "Dad",
-        phone: ''
+        phone: '+15857277105'
     }
 ];
 
@@ -201,8 +202,75 @@ app.post('/sms',
     twiml.message('The Robots are coming! Head for the hills!');
     console.log('twilio request', req.body);
 
-    res.writeHead(200, {'Content-Type': 'text/xml'});
-    res.end(twiml.toString());
+    var fromNumber = req.body.From;
+    var foundUsers = _.filter(users, function(item){
+        return item.phone == fromNumber;
+    });
+
+    MongoClient.connect(url, function(err, db) {
+        if (err) throw err;
+        var dbo = db.db("heroku_jtgx7hwp");
+        var query = { chatId: 0 };
+        dbo.collection("messages").find(query).toArray(function(err, result) {
+            if (err) throw err;
+            console.log(result);
+            db.close();
+            // return result.messages;
+
+            var messages = result.messages;
+            messages.push({
+                userId: foundUsers[0].userId,
+                text: req.body.Body,
+                time: new Date()
+            });
+
+            MongoClient.connect(url, function(err2, db2) {
+
+                var dbo2 = db2.db("heroku_jtgx7hwp");
+                var query2 = { chatId: 0 };
+                var newvalues = { $set: {messages: messages } };
+                dbo.collection("messages").updateOne(query2, newvalues, function(err2, result2) {
+                    if (err2) throw err2;
+                    console.log("1 document updated");
+                    db2.close();
+                    return true;
+                });
+            });
+        });
+    });
+
+    // res.writeHead(200, {'Content-Type': 'text/xml'});
+    // res.end(twiml.toString());
+    res.end();
 });
+
+function getMessages(){
+    MongoClient.connect(url, function(err, db) {
+        if (err) throw err;
+        var dbo = db.db("heroku_jtgx7hwp");
+        var query = { chatId: 0 };
+        dbo.collection("messages").find(query).toArray(function(err, result) {
+            if (err) throw err;
+            console.log(result);
+            db.close();
+            return result.messages;
+        });
+    });
+}
+
+function saveMessages(messages){
+    MongoClient.connect(url, function(err, db) {
+        if (err) throw err;
+        var dbo = db.db("heroku_jtgx7hwp");
+        var query = { chatId: 0 };
+        var newvalues = { $set: {messages: messages } };
+        dbo.collection("messages").updateOne(query, newvalues, function(err, result) {
+            if (err) throw err;
+            console.log("1 document updated");
+            db.close();
+            return true;
+        });
+    });
+}
 
 app.listen(process.env.PORT || 3000);
