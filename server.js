@@ -4,6 +4,8 @@ var Strategy = require('passport-local').Strategy;
 var cors = require('cors')
 
 var mongoose = require('mongoose');
+const MessagingResponse = require('twilio').twiml.MessagingResponse;
+
 
 // mongoose.connect(process.env.MONGODB_URI);
 // var mongo = mongoose.connection;
@@ -163,5 +165,15 @@ app.get('/reset',
             });
         });
     });
+
+app.post('/sms',
+    function(req, res){
+    const twiml = new MessagingResponse();
+
+    twiml.message('The Robots are coming! Head for the hills!');
+
+    res.writeHead(200, {'Content-Type': 'text/xml'});
+    res.end(twiml.toString());
+});
 
 app.listen(process.env.PORT || 3000);
