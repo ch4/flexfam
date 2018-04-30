@@ -25,7 +25,7 @@ angular.module('starter.services', [])
 
   function addMessage(data){
 
-    $http.post('http://flexfam.herokuapp.com/messages', data, null)
+    $http.post('https://flexfam.herokuapp.com/messages', data, null)
       .then(
         function(response){
           // success callback
@@ -48,7 +48,7 @@ angular.module('starter.services', [])
   function getMessages() {
     return $http({
       method: 'GET',
-      url: 'http://flexfam.herokuapp.com/messages'
+      url: 'https://flexfam.herokuapp.com/messages'
     }).then(function successCallback(response) {
       // this callback will be called asynchronously
       // when the response is available
