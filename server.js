@@ -1,7 +1,8 @@
 var express = require('express');
 var passport = require('passport');
 var Strategy = require('passport-local').Strategy;
-var cors = require('cors')
+var cors = require('cors');
+var _ = require('lodash');
 
 var mongoose = require('mongoose');
 const MessagingResponse = require('twilio').twiml.MessagingResponse;
@@ -19,7 +20,33 @@ var db = require('./db');
 var MongoClient = require('mongodb').MongoClient;
 var url = process.env.MONGODB_URI;
 
-
+var users = [
+    {
+        userId: 1,
+        name: "Mom",
+        phone: '5412818096'
+    },
+    {
+        userId: 2,
+        name: "Brother",
+        phone: '2252509661'
+    },
+    {
+        userId: 3,
+        name: "Grandma",
+        phone: '7196495701'
+    },
+    {
+        userId: 4,
+        name: "Uncle",
+        phone: '4156466297'
+    },
+    {
+        userId: 5,
+        name: "Dad",
+        phone: ''
+    }
+];
 
 
 // Configure the local strategy for use by Passport.
@@ -171,6 +198,7 @@ app.post('/sms',
     const twiml = new MessagingResponse();
 
     twiml.message('The Robots are coming! Head for the hills!');
+    console.log(req.body);
 
     res.writeHead(200, {'Content-Type': 'text/xml'});
     res.end(twiml.toString());
