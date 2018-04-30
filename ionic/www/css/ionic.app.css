@@ -9894,3 +9894,6 @@ a.button {
 
 .page-chat .chatitem .username {
   font-weight: bolder; }
+
+.page-chat .item-input-inset {
+  bottom: 48px; }

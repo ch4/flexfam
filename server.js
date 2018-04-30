@@ -13,6 +13,11 @@ var mongoose = require('mongoose');
 
 var db = require('./db');
 
+var MongoClient = require('mongodb').MongoClient;
+var url = process.env.MONGODB_URI;
+
+
+
 
 // Configure the local strategy for use by Passport.
 //
@@ -63,7 +68,7 @@ app.set('view engine', 'ejs');
 // logging, parsing, and session handling.
 app.use(require('morgan')('combined'));
 app.use(require('cookie-parser')());
-app.use(require('body-parser').urlencoded({ extended: true }));
+app.use(require('body-parser').json({ extended: true }));
 app.use(require('express-session')({ secret: 'keyboard cat', resave: false, saveUninitialized: false }));
 
 // Initialize Passport and restore authentication state, if any, from the
@@ -71,7 +76,7 @@ app.use(require('express-session')({ secret: 'keyboard cat', resave: false, save
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.use(express.static('ionic/www'))
+app.use(express.static('ionic/www'));
 
 // Define routes.
 // app.get('/',
@@ -101,5 +106,60 @@ app.get('/profile',
   function(req, res){
     res.render('profile', { user: req.user });
   });
+
+app.get('/messages',
+    function(req, res){
+        MongoClient.connect(url, function(err, db) {
+            if (err) throw err;
+            var dbo = db.db("heroku_jtgx7hwp");
+            var query = { chatId: 0 };
+            dbo.collection("messages").find(query).toArray(function(err, result) {
+                if (err) throw err;
+                console.log(result);
+                db.close();
+                res.json(result);
+            });
+        });
+});
+
+app.post('/messages',
+    function(req, res){
+    var messages = req.body.messages;
+        MongoClient.connect(url, function(err, db) {
+            if (err) throw err;
+            var dbo = db.db("heroku_jtgx7hwp");
+            var query = { chatId: 0 };
+            var newvalues = { $set: {messages: messages } };
+            dbo.collection("messages").updateOne(query, newvalues, function(err, result) {
+                if (err) throw err;
+                console.log("1 document updated");
+                db.close();
+                res.end();
+            });
+        });
+});
+
+app.get('/reset',
+    function(req, res){
+    var messages = [
+        {
+            userId: 5,
+            text: "Can you pick up the kids from school today?"
+        }
+    ];
+
+        MongoClient.connect(url, function(err, db) {
+            if (err) throw err;
+            var dbo = db.db("heroku_jtgx7hwp");
+            var query = { chatId: 0 };
+            var newvalues = { $set: {messages: messages } };
+            dbo.collection("messages").updateOne(query, newvalues, function(err, result) {
+                if (err) throw err;
+                console.log("1 document updated");
+                db.close();
+                res.end();
+            });
+        });
+    });
 
 app.listen(process.env.PORT || 3000);

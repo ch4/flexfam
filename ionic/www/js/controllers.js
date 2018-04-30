@@ -110,21 +110,46 @@ angular.module('starter.controllers', ['starter.services'])
 
 }])
 
-.controller('ChatCtrl', ['$scope', '$stateParams', '$state', 'UserService', function($scope, $stateParams, $state, UserService) {
+.controller('ChatCtrl', ['$scope', '$stateParams', '$state', 'UserService', '$ionicScrollDelegate', function($scope, $stateParams, $state, UserService, $ionicScrollDelegate) {
   $scope.UserService = UserService;
+  $scope.data = {
+    message: '',
+
+  };
 
   $scope.chatData = [
     {
-      ownerId: 1,
-      recipientId: 2,
+      chatId: 0,
+      ownerId: 5,
+      recipientId: 1,
       messages: [
         {
-          userId: 1,
-          text: "hello"
+          userId: 5,
+          text: "Can you pick up the kids from school today?"
         }
       ]
     }
   ];
+
+  $scope.convertUtcToLocal = function (timeStr) {
+    return new Date(timeStr).toString();
+    //return prettyDate(timeStr);
+  };
+
+  $scope.sendMessage = function() {
+    var d = new Date();
+    // d = d.toLocaleTimeString().replace(/:\d+ /, ' ');
+
+    $scope.chatData[0].messages.push({
+      userId: 5,
+      text: $scope.data.message,
+      time: d
+    });
+
+    delete $scope.data.message;
+    $ionicScrollDelegate.scrollBottom(true);
+
+  };
 
 }])
 

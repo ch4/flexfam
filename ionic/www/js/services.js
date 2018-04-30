@@ -3,11 +3,23 @@ angular.module('starter.services', [])
   var users = [
     {
       userId: 1,
-      name: "Rosie"
+      name: "Mom"
     },
     {
       userId: 2,
-      name: "Jace"
+      name: "Brother"
+    },
+    {
+      userId: 3,
+      name: "Grandma"
+    },
+    {
+      userId: 4,
+      name: "Uncle"
+    },
+    {
+      userId: 5,
+      name: "Dad"
     }
   ];
 

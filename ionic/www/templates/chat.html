@@ -1,17 +1,16 @@
 <ion-view view-title="Chat" class="page-chat">
+  <ion-nav-bar class="bar-stable">
+    <ion-nav-back-button>
+    </ion-nav-back-button>
+
+    <ion-nav-buttons side="right">
+      <a class="button button-icon button-clear ion-search" href="">
+      </a>
+    </ion-nav-buttons>
+  </ion-nav-bar>
+
   <ion-content>
     <ion-list>
-      <!--<ion-item ng-click="">-->
-        <!--Manage Family-->
-      <!--</ion-item>-->
-      <!--<ion-item ng-click="">-->
-        <!--Manage Permissions-->
-      <!--</ion-item>-->
-      <!--<ion-item ng-click="">-->
-        <!--Configure Reminders-->
-      <!--</ion-item>-->
-
-
       <!--<div class="list card">-->
         <!--<div class="item item-avatar">-->
           <!--<img src="/img/ionic.png">-->
@@ -20,16 +19,22 @@
         <!--</div>-->
       <!--</div>-->
 
-      <ion-item ng-repeat="chat in chatData" class="item-icon-left item-icon-right chatitem" ng-href="">
+      <ion-item ng-repeat="message in chatData[0].messages" class="item-icon-left item-icon-right chatitem" ng-href="">
         <i class="icon ion-chatbox"></i>
-        <div class="username">{{UserService.getUserName(chat.recipientId)}}</div>
-        <div>{{chat.messages[0].text}}</div>
-        <i class="icon ion-chevron-right"></i>
-        <!--<i class="icon" ng-class="{'ion-ios7-circle-filled': !task.is_done(), 'ion-ios7-checkmark': task.is_done()}" ng-click="toggleDone(task)"></i>-->
-        <!--<span ng-click="toggleDone(task)" ng-class="{done: task.is_done()}">{{ task.the_title() }}</span>-->
-        <!--<i class="icon ion-ios7-close-empty" ng-click="deleteTask(task)"></i>-->
+        <div class="username">{{UserService.getUserName(message.userId)}}</div>
+        <div>{{message.text}}</div>
       </ion-item>
 
     </ion-list>
   </ion-content>
+
+  <ion-footer-bar keyboard-attach class="bar-stable item-input-inset">
+    <label class="item-input-wrapper">
+      <input type="text" placeholder="Type your message" on-return="sendMessage(); closeKeyboard()" ng-model="data.message" on-focus="inputUp()" on-blur="inputDown()" />
+    </label>
+    <button class="button button-clear" ng-click="sendMessage()">
+      Send
+    </button>
+  </ion-footer-bar>
+
 </ion-view>
