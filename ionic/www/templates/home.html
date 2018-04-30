@@ -1,7 +1,7 @@
-<ion-view view-title="Home" class="page-home" scroll="false">
+<ion-view view-title="Home" id="page-home" scroll="true">
   <ion-nav-bar class="bar-stable">
-    <ion-nav-back-button>
-    </ion-nav-back-button>
+    <!--<ion-nav-back-button>-->
+    <!--</ion-nav-back-button>-->
 
     <ion-nav-buttons side="left">
       <button class="button button-icon button-clear ion-navicon" menu-toggle="left">
@@ -17,19 +17,24 @@
   <ion-content scroll="false">
     <ion-list scroll="false">
       <!--<ion-item ng-repeat="playlist in playlists" href="#/app/playlists/{{playlist.id}}">-->
-        <!--{{playlist.title}}-->
+      <!--{{playlist.title}}-->
       <!--</ion-item>-->
       <ion-item>
         <div class="event-reminder">
-            <h3>Jace</h3>
-            <p class="topic"><strong>Kinder Soccer Game</strong></p>
-            <p>Saturday May 5, 2018 1:00pm</p>
-            <p>Jefferson Elementary</p>
+          <h3>Jace</h3>
+          <p class="topic"><strong>Kinder Soccer Game</strong></p>
+          <p>Saturday May 5, 2018 1:00pm</p>
+          <p>Jefferson Elementary</p>
         </div>
       </ion-item>
       <ion-item>
         <calendar calendar-mode="mode" event-source="calendar.eventSource" event-selected="onEventSelected(event)">
-
+      </ion-item>
+      <ion-item ng-click="">
+        <div class="center">
+          <i class="center ion-plus-circled"></i>
+          <span class="center">Add New Event</span>
+        </div>
       </ion-item>
     </ion-list>
   </ion-content>

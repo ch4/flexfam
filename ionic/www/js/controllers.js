@@ -108,6 +108,21 @@ angular.module('starter.controllers', [])
 
 }])
 
+.controller('ChatCtrl', ['$scope', '$stateParams', '$state', function($scope, $stateParams, $state) {
+  $scope.chatData = [
+    {
+      participantsId: [1,2],
+      messages: [
+        {
+          userId: 1,
+          text: "hello"
+        }
+      ]
+    }
+  ];
+
+}])
+
 .controller('EventDetailsCtrl', function($scope, $stateParams) {
   $scope.eventObj = $stateParams.event;
   console.log('$scope.event', $scope.event);

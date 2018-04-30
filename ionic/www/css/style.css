@@ -1,7 +1,1 @@
 /* Empty. Add your own CSS if you like */
-
-.event-detail-container {
-  /* This is a hack to fix the calendar leaving a misaligned border */
-  border-top: 0px!important;
-}
-

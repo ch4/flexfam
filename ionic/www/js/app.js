@@ -80,6 +80,16 @@ angular.module('starter', ['ionic', 'starter.controllers', 'ui.rCalendar'])
     }
   })
 
+    .state('app.chat', {
+      url: '/chat',
+      views: {
+        'menuContent': {
+          templateUrl: 'templates/chat.html',
+          controller: 'ChatCtrl'
+        }
+      }
+    })
+
   .state('app.eventdetails', {
     url: '/eventdetails',
     views: {

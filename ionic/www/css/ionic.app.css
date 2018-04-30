@@ -9874,6 +9874,21 @@ a.button {
   -webkit-transition-duration: 0s;
   transition-duration: 0s; }
 
+.center {
+  margin-left: auto !important;
+  margin-right: auto !important;
+  display: block;
+  text-align: center !important;
+  width: 99%; }
+
+.event-detail-container {
+  /* This is a hack to fix the calendar leaving a misaligned border */
+  border-top: 0px !important; }
+
 .page-home .event-reminder {
-  height: 50px;
+  height: 100px;
   width: 100%; }
+
+.page-event-details .placeholder-icon {
+  padding-right: 10px;
+  color: red; }
