@@ -217,7 +217,7 @@ app.post('/sms',
             db.close();
             // return result.messages;
 
-            var messages = result.messages;
+            var messages = JSON.parse(result.messages);
             messages.push({
                 userId: foundUsers[0].userId,
                 text: req.body.Body,
