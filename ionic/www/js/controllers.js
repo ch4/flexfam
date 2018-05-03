@@ -124,7 +124,7 @@ angular.module('starter.controllers', ['starter.services'])
 
 
 
-  setInterval(myMethod, 1000);
+  setInterval(myMethod, 3000);
 
   function myMethod( )
   {

@@ -1,36 +1,40 @@
 angular.module('starter.services', [])
 .factory('UserService', ['$http', function($http) {
+
   var users = [
     {
       userId: 1,
       name: "Mom",
-      phone: '+15412818096'
+      phone: '+11234567890'
     },
     {
       userId: 2,
       name: "Brother",
-      phone: '+12252509661'
+      phone: '+11234567890'
     },
     {
       userId: 3,
       name: "Grandma",
-      phone: '+17196495701'
+      phone: '+11234567890'
     },
     {
       userId: 4,
       name: "Uncle",
-      phone: '+14156466297'
+      phone: '+11234567890'
     },
     {
       userId: 5,
       name: "Dad",
-      phone: '+15857277105'
+      phone: '+11234567890'
     }
   ];
 
+  // var host = 'http://localhost:3000';
+  var host = 'https://flexfam.herokuapp.com';
+
   function addMessage(data){
 
-    $http.post('https://flexfam.herokuapp.com/messages', data, null)
+    $http.post(host+'/messages', data, null)
       .then(
         function(response){
           // success callback
@@ -53,7 +57,7 @@ angular.module('starter.services', [])
   function getMessages() {
     return $http({
       method: 'GET',
-      url: 'https://flexfam.herokuapp.com/messages'
+      url: host + '/messages'
     }).then(function successCallback(response) {
       // this callback will be called asynchronously
       // when the response is available

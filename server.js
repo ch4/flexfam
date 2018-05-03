@@ -7,7 +7,12 @@ var Promise = require("bluebird");
 
 var mongoose = require('mongoose');
 const MessagingResponse = require('twilio').twiml.MessagingResponse;
+// Twilio Credentials
+const accountSid = process.env.TWILIO_ACCOUNT_SID;
+const authToken = process.env.TWILIO_AUTH_TOKEN;
 
+// require the Twilio module and create a REST client
+const client = require('twilio')(accountSid, authToken);
 
 // mongoose.connect(process.env.MONGODB_URI);
 // var mongo = mongoose.connection;
@@ -25,27 +30,27 @@ var users = [
     {
         userId: 1,
         name: "Mom",
-        phone: '+15412818096'
+        phone: '+11234567890'
     },
     {
         userId: 2,
         name: "Brother",
-        phone: '+12252509661'
+        phone: '+11234567890'
     },
     {
         userId: 3,
         name: "Grandma",
-        phone: '+17196495701'
+        phone: '+11234567890'
     },
     {
         userId: 4,
         name: "Uncle",
-        phone: '+14156466297'
+        phone: '+11234567890'
     },
     {
         userId: 5,
         name: "Dad",
-        phone: '+15857277105'
+        phone: '+11234567890'
     }
 ];
 
@@ -142,7 +147,7 @@ app.get('/profile',
 app.get('/messages',
     function(req, res){
         MongoClient.connect(url, function(err, db) {
-            if (err) throw err;
+            if (err) console.error('error querying mongo150', err);
             var dbo = db.db("heroku_jtgx7hwp");
             var query = { chatId: 0 };
             dbo.collection("messages").find(query).toArray(function(err, result) {
@@ -158,16 +163,33 @@ app.options('/messages', cors({origin:false})) // enable pre-flight request for 
 app.post('/messages',
     function(req, res){
     var messages = req.body.messages;
+    var newmsg = messages.slice(-1)[0];
+
         MongoClient.connect(url, function(err, db) {
-            if (err) throw err;
+            if (err) console.error('error querying mongo185', err);
             var dbo = db.db("heroku_jtgx7hwp");
             var query = { chatId: 0 };
             var newvalues = { $set: {messages: messages } };
             dbo.collection("messages").updateOne(query, newvalues, function(err, result) {
-                if (err) throw err;
+                if (err) console.error('error updating mongo190', err);
                 console.log("1 document updated");
                 db.close();
                 res.end();
+            });
+        });
+
+        var foundUsers = _.filter(users, function(item){
+            return item.userId == newmsg.userId;
+        });
+
+        users.forEach(function(item){
+            client.messages
+                .create({
+                    to: item.phone,
+                    from: process.env.TWILIO_PHONE_NUMBER || '+11234567890',
+                    body: foundUsers[0].name + " - " + newmsg.text,
+                }).then(function(result){
+                console.log(result);
             });
         });
 });
@@ -175,19 +197,19 @@ app.post('/messages',
 app.get('/reset',
     function(req, res){
     var messages = [
-        {
-            userId: 5,
-            text: "Can you pick up the kids from school today?"
-        }
+        // {
+        //     userId: 5,
+        //     text: "Can you pick up the kids from school today?"
+        // }
     ];
 
         MongoClient.connect(url, function(err, db) {
-            if (err) throw err;
+            if (err) console.error('error querying mongo208', err);
             var dbo = db.db("heroku_jtgx7hwp");
             var query = { chatId: 0 };
             var newvalues = { $set: {messages: messages } };
             dbo.collection("messages").updateOne(query, newvalues, function(err, result) {
-                if (err) throw err;
+                if (err) console.error('error resetting mongo213', err);
                 console.log("1 document updated");
                 db.close();
                 res.end();
@@ -199,7 +221,7 @@ app.post('/sms',
     function(req, res){
     const twiml = new MessagingResponse();
 
-    twiml.message('The Robots are coming! Head for the hills!');
+    // twiml.message('The Robots are coming! Head for the hills!');
     console.log('twilio request', req.body);
 
     var fromNumber = req.body.From;
@@ -207,17 +229,31 @@ app.post('/sms',
         return item.phone == fromNumber;
     });
 
-    MongoClient.connect(url, function(err, db) {
-        if (err) throw err;
+        users.forEach(function(item){
+            if(item.phone != fromNumber){
+                client.messages
+                    .create({
+                        to: item.phone,
+                        from: process.env.TWILIO_PHONE_NUMBER || '+11234567890',
+                        body: foundUsers[0].name + " - " + req.body.Body,
+                    }).then(function(result){
+                    console.log(result);
+                });
+            }
+
+        });
+
+    MongoClient.connect(url, function(err0, db) {
+        if (err0) throw err0;
         var dbo = db.db("heroku_jtgx7hwp");
         var query = { chatId: 0 };
         dbo.collection("messages").find(query).toArray(function(err, result) {
-            if (err) throw err;
+            if (err) console.error('error querying mongo252', err);
             console.log(result);
             db.close();
             // return result.messages;
 
-            var messages = result.messages;
+            var messages = result[0].messages;
             messages.push({
                 userId: foundUsers[0].userId,
                 text: req.body.Body,
@@ -225,17 +261,18 @@ app.post('/sms',
             });
 
             MongoClient.connect(url, function(err2, db2) {
-
+                if(err2) console.error('error querying mongo265', err2);
                 var dbo2 = db2.db("heroku_jtgx7hwp");
                 var query2 = { chatId: 0 };
                 var newvalues = { $set: {messages: messages } };
-                dbo.collection("messages").updateOne(query2, newvalues, function(err2, result2) {
-                    if (err2) throw err2;
+                dbo2.collection("messages").updateOne(query2, newvalues, function(err3, result2) {
+                    if (err3) console.error('error updating mongo270', err3);
                     console.log("1 document updated");
                     db2.close();
                     return true;
                 });
             });
+
         });
     });
 
@@ -265,7 +302,7 @@ function saveMessages(messages){
         var query = { chatId: 0 };
         var newvalues = { $set: {messages: messages } };
         dbo.collection("messages").updateOne(query, newvalues, function(err, result) {
-            if (err) throw err;
+            // if (err) throw err;
             console.log("1 document updated");
             db.close();
             return true;

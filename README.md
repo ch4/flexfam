@@ -1,3 +1,12 @@
+Altogether (f.k.a Flexfam)
+
+==========
+
+Required env vars:
+ - process.env.TWILIO_ACCOUNT_SID;
+ - process.env.TWILIO_AUTH_TOKEN
+ - process.env.TWILIO_PHONE_NUMBER
+
 This example demonstrates how to use [Express](http://expressjs.com/) 4.x and
 [Passport](http://passportjs.org/) to authenticate users using a username and
 password with [form-based authentication](https://en.wikipedia.org/wiki/HTTP%2BHTML_form-based_authentication).
